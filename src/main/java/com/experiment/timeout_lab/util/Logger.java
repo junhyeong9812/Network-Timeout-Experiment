@@ -39,6 +39,26 @@ public class Logger {
         log(Level.DEBUG, message);
     }
 
+    public void info(String message) {
+        log(Level.INFO, message);
+    }
+
+    public void warn(String message) {
+        log(Level.WARN, message);
+    }
+
+    public void error(String message) {
+        log(Level.ERROR, message);
+    }
+
+    public void error(String message, Throwable throwable) {
+        log(Level.ERROR, message + " - " + throwable.getMessage());
+        if (currentLevel.ordinal() <= Level.DEBUG.ordinal()) {
+            throwable.printStackTrace();
+        }
+    }
+
+
     private void log(Level level, String message) {
         if (level.ordinal() >= currentLevel.ordinal()) {
             String timestamp = LocalDateTime.now().format(FORMATTER);
