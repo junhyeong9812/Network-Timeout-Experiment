@@ -90,7 +90,7 @@ public abstract class BaseScenario {
         } finally {
             // 정리
             logger.info("정리 중...");
-//            teardown();
+            teardown();
             logger.info("시나리오 종료:" + scenarioName);
             logger.separator();
         }
