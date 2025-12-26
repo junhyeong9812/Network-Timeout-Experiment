@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # 메인 애플리케이션
+  app:
+    build: .
+    container_name: timeout-lab-app
+    volumes:
+      - ./logs:/app/logs
+      - ./results:/app/results
+    networks:
+      - timeout-net
+    stdin_open: true
+    tty: true
+    environment:
+      - JAVA_OPTS=--enable-preview -Xms256m -Xmx1024m
+
+  # NO_ACCEPT 서버
+  server-no-accept:
+    build: .
+    container_name: timeout-lab-no-accept
+    command: ["-cp", "classes/java/main", "com.experiment.timeout_lab.server.ProblematicServer", "NO_ACCEPT", "8081"]
+    ports:
+      - "8081:8081"
+    networks:
+      - timeout-net
+
+  # NO_RESPONSE 서버
+  server-no-response:
+    build: .
+    container_name: timeout-lab-no-response
+    command: ["-cp", "classes/java/main", "com.experiment.timeout_lab.server.ProblematicServer", "NO_RESPONSE", "8082"]
+    ports:
+      - "8082:8082"
+    networks:
+      - timeout-net
+
+  # SLOW_RESPONSE 서버
+  server-slow-response:
+    build: .
+    container_name: timeout-lab-slow-response
+    command: ["-cp", "classes/java/main", "com.experiment.timeout_lab.server.ProblematicServer", "SLOW_RESPONSE", "8083"]
+    ports:
+      - "8083:8083"
+    networks:
+      - timeout-net
+
+  # 벤치마크 실행기
+  benchmark:
+    build: .
+    container_name: timeout-lab-benchmark
+    command: ["-cp", "classes/java/main", "com.experiment.timeout_lab.benchmark.BenchmarkRunner"]
+    volumes:
+      - ./results:/app/results
+    networks:
+      - timeout-net
+    depends_on:
+      - server-no-accept
+      - server-no-response
+      - server-slow-response
+
+networks:
+  timeout-net:
+    driver: bridge
