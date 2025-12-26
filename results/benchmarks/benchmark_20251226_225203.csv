@@ -1,0 +1,5 @@
+Timestamp,Scenario,Success,Failure,Timeout,AvgResponseTime,TotalTime
+20251226_225203,Connect Timeout Scenario,0,20,0,11.75,1449
+20251226_225203,Read Timeout Scenario,15,5,13,9081.25,220076
+20251226_225203,Write Timeout Scenario,15,5,0,1257.15,31248
+20251226_225203,Thread Pool Exhaustion Scenario,2,0,0,17060.50,35156
